@@ -8,25 +8,24 @@ from app.auth_api.routes import auth_router
 from app.orders_api.routes import router
 
 
-
 @asynccontextmanager
-async def lifespan(app:FastAPI):
+async def lifespan(app: FastAPI):
     create_tables()
     yield
 
 
-app = FastAPI(title="Tee cheap Backend" , lifespan=lifespan)
+app = FastAPI(title="Tee cheap Backend", lifespan=lifespan)
 
 
+app.include_router(health_router, prefix="/health", tags=["Health routes"])
 
-app.include_router(health_router , prefix="/health" , tags=["Health routes"])
 
-@app.get("/" , tags=["Root Route"])
+@app.get("/", tags=["Root Route"])
 def root_route():
-    return {"messaage" : "Welcome to the server of tee cheap"}
+    return {"messaage": "Welcome to the server of tee cheap"}
 
 
-app.include_router(auth_router , tags=["Auth Apis"])
+app.include_router(auth_router, tags=["Auth Apis"])
 
 
-app.include_router(router , tags=["Orders"])
+app.include_router(router, tags=["Orders"])
